@@ -1,17 +1,23 @@
 'use strict';
 
-var CloudWidth = 420;
-var CloudHeight = 270;
-var CloudX = 100;
-var CloudY = 10;
+var CLOUD_WIDTH = 420;
+var CLOUD_HEIGHT = 270;
+var CLOUD_X = 100;
+var CLOUD_Y = 10;
 
-var GistoWidth = 40;
-var GistoHeight = 150;
-var GistoGap = 50;
+var GISTO_WIDTH = 40;
+var GISTO_HEIGHT = 150;
+var GISTO_GAP = 50;
+
+var CONTENT_INDENT = 60;
+
+var COLUMN_DY = 90;
+var NAMES_Y = 260;
+var TIMES_DY = 230;
 
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
-  ctx.fillRect(x, y, CloudWidth, CloudHeight);
+  ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
 };
 
 var getRandomInt = function (min, max) {
@@ -31,35 +37,38 @@ var getMaxElement = function (arrNumbers) {
 };
 
 window.renderStatistics = function (ctx, names, times) {
-  renderCloud(ctx, CloudX + 10, CloudY + 10, 'rgba(0, 0, 0, 0.7)');
-  renderCloud(ctx, CloudX, CloudY, '#fff');
+  renderCloud(ctx, CLOUD_X + 10, CLOUD_Y + 10, 'rgba(0, 0, 0, 0.7)');
+  renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
 
-  var getGistoСolumn = function () {
-    return ctx.fillRect(CloudX + 60 + i * (GistoGap + GistoWidth), 90 + GistoHeight, GistoWidth, -(GistoHeight * times[i] / maxTime));
+  var getGistoСolumn = function (i) {
+    return ctx.fillRect(CLOUD_X + CONTENT_INDENT + i * (GISTO_GAP + GISTO_WIDTH), COLUMN_DY + GISTO_HEIGHT, GISTO_WIDTH, -(GISTO_HEIGHT * times[i] / maxTime));
   };
 
-  var getNamesСolumn = function () {
-    return ctx.fillText(names[i], CloudX + 60 + i * 90, 260);
+  var getGistoСolor = function (i) {
+    ctx.fillStyle = RandomRGBA;
+    if (names[i] === 'Вы') {
+      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+    }
+  };
+
+  var getNamesСolumn = function (i) {
+    return ctx.fillText(names[i], CLOUD_X + CONTENT_INDENT + i * (GISTO_WIDTH + GISTO_GAP), NAMES_Y);
   };
 
   ctx.fillStyle = '#000';
 
   ctx.font = '16px PT Mono';
-  ctx.fillText('Ура вы победили!', CloudX + 10, CloudY + 40);
-  ctx.fillText('Список результатов', CloudX + 10, CloudY + 55);
+  ctx.fillText('Ура вы победили!', CLOUD_X + 10, CLOUD_Y + 40);
+  ctx.fillText('Список результатов', CLOUD_X + 10, CLOUD_Y + 55);
 
   var maxTime = getMaxElement(times);
 
   for (var i = 0; i < names.length; i++) {
     var RandomRGBA = 'rgba(0, ' + getRandomInt(0, 255) + ', 255, 1)';
-    ctx.fillStyle = RandomRGBA;
-    getGistoСolumn();
-    if (names[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-      getGistoСolumn();
-    }
+    getGistoСolor(i);
+    getGistoСolumn(i);
     ctx.fillStyle = '#000';
-    ctx.fillText(Math.round(times[i]), CloudX + 60 + i * 90, -(GistoHeight * times[i] / maxTime) + 230);
-    getNamesСolumn();
+    ctx.fillText(Math.round(times[i]), CLOUD_X + CONTENT_INDENT + i * (GISTO_WIDTH + GISTO_GAP), -(GISTO_HEIGHT * times[i] / maxTime) + TIMES_DY);
+    getNamesСolumn(i);
   }
 };
