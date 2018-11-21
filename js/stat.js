@@ -1,48 +1,65 @@
-var CLOUD_WIDTH = 420;
-var CLOUD_HEIGHT = 270;
+'use strict';
 
-var renderCloud = function(ctx, x, y, color) {
+var CloudWidth = 420;
+var CloudHeight = 270;
+var CloudX = 100;
+var CloudY = 10;
+
+var GistoWidth = 40;
+var GistoHeight = 150;
+var GistoGap = 50;
+
+var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
-  ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
+  ctx.fillRect(x, y, CloudWidth, CloudHeight);
 };
 
-var getRandomInt = function(min, max) {
+var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
-var getMaxElement = function(arr) {
-  var maxElement = arr[0];
+var getMaxElement = function (arrNumbers) {
+  var maxElement = arrNumbers[0];
 
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i] > maxElement) {
-      maxElement = arr[i];
+  for (var i = 0; i < arrNumbers.length; i++) {
+    if (arrNumbers[i] > maxElement) {
+      maxElement = arrNumbers[i];
     }
   }
 
   return maxElement;
 };
 
-window.renderStatistics = function (ctx ,names ,times) {
-  renderCloud(ctx, 110, 20, 'rgba(0, 0, 0, 0.7)');
-  renderCloud(ctx, 100, 10, '#fff');
+window.renderStatistics = function (ctx, names, times) {
+  renderCloud(ctx, CloudX + 10, CloudY + 10, 'rgba(0, 0, 0, 0.7)');
+  renderCloud(ctx, CloudX, CloudY, '#fff');
+
+  var getGistoСolumn = function () {
+    return ctx.fillRect(CloudX + 60 + i * (GistoGap + GistoWidth), 90 + GistoHeight, GistoWidth, -(GistoHeight * times[i] / maxTime));
+  };
+
+  var getNamesСolumn = function () {
+    return ctx.fillText(names[i], CloudX + 60 + i * 90, 260);
+  };
 
   ctx.fillStyle = '#000';
 
   ctx.font = '16px PT Mono';
-  ctx.fillText('Ура вы победили!\nСписок результатов', 110, 35);
+  ctx.fillText('Ура вы победили!', CloudX + 10, CloudY + 40);
+  ctx.fillText('Список результатов', CloudX + 10, CloudY + 55);
 
   var maxTime = getMaxElement(times);
 
-  for (var i=0; i<names.length; i++) {
-    var RandomRGBA = 'rgba(0, '+getRandomInt(0, 255)+', 255, 1)';
+  for (var i = 0; i < names.length; i++) {
+    var RandomRGBA = 'rgba(0, ' + getRandomInt(0, 255) + ', 255, 1)';
     ctx.fillStyle = RandomRGBA;
-    ctx.fillRect(160 + i * 90, 70 + 150, 40, -(150 * times[i] / maxTime));
-    if (names[i]==='Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)'
-      ctx.fillRect(160 + i * 90, 70 + 150, 40, -(150 * times[i] / maxTime));
+    getGistoСolumn();
+    if (names[i] === 'Вы') {
+      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+      getGistoСolumn();
     }
-    ctx.fillStyle = '#000'
-    ctx.fillText(Math.round(times[i]), 160 + i * 90, 60);
-    ctx.fillText(names[i], 160 + i * 90, 250);
+    ctx.fillStyle = '#000';
+    ctx.fillText(Math.round(times[i]), CloudX + 60 + i * 90, -(GistoHeight * times[i] / maxTime) + 230);
+    getNamesСolumn();
   }
 };
