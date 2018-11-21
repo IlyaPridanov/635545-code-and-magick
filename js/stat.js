@@ -40,19 +40,19 @@ window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_X + 10, CLOUD_Y + 10, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
 
-  var getGistoСolumn = function (i) {
-    return ctx.fillRect(CLOUD_X + CONTENT_INDENT + i * (GISTO_GAP + GISTO_WIDTH), COLUMN_DY + GISTO_HEIGHT, GISTO_WIDTH, -(GISTO_HEIGHT * times[i] / maxTime));
+  var setGistoCanvasColumn = function (i) {
+    ctx.fillRect(CLOUD_X + CONTENT_INDENT + i * (GISTO_GAP + GISTO_WIDTH), COLUMN_DY + GISTO_HEIGHT, GISTO_WIDTH, -(GISTO_HEIGHT * times[i] / maxTime));
   };
 
-  var getGistoСolor = function (i) {
+  var setGistoCanvasColor = function (i) {
     ctx.fillStyle = RandomRGBA;
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
     }
   };
 
-  var getNamesСolumn = function (i) {
-    return ctx.fillText(names[i], CLOUD_X + CONTENT_INDENT + i * (GISTO_WIDTH + GISTO_GAP), NAMES_Y);
+  var setCanvasNames = function (i) {
+    ctx.fillText(names[i], CLOUD_X + CONTENT_INDENT + i * (GISTO_WIDTH + GISTO_GAP), NAMES_Y);
   };
 
   ctx.fillStyle = '#000';
@@ -65,10 +65,10 @@ window.renderStatistics = function (ctx, names, times) {
 
   for (var i = 0; i < names.length; i++) {
     var RandomRGBA = 'rgba(0, ' + getRandomInt(0, 255) + ', 255, 1)';
-    getGistoСolor(i);
-    getGistoСolumn(i);
+    setGistoCanvasColor(i);
+    setGistoCanvasColumn(i);
     ctx.fillStyle = '#000';
     ctx.fillText(Math.round(times[i]), CLOUD_X + CONTENT_INDENT + i * (GISTO_WIDTH + GISTO_GAP), -(GISTO_HEIGHT * times[i] / maxTime) + TIMES_DY);
-    getNamesСolumn(i);
+    setCanvasNames(i);
   }
 };
